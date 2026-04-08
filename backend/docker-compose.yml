@@ -1,0 +1,29 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: dobroryadom-api
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: postgresql+psycopg://dobro:dobro@db:5432/dobro
+      JWT_SECRET: dobro-secret-key
+    depends_on:
+      - db
+
+  db:
+    image: postgres:16-alpine
+    container_name: dobroryadom-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: dobro
+      POSTGRES_USER: dobro
+      POSTGRES_PASSWORD: dobro
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
